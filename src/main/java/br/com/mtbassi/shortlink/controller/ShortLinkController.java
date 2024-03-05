@@ -31,4 +31,9 @@ public class ShortLinkController {
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, originalLink).build();
     }
 
+    @GetMapping("/info/{shortLink}")
+    public ResponseEntity<ResponseDTO> info(@PathVariable String shortLink){
+        return ResponseEntity.ok(service.info(shortLink));
+    }
+
 }

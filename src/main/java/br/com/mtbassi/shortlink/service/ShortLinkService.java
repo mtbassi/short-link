@@ -26,10 +26,16 @@ public class ShortLinkService {
     }
 
     public String retrieveOriginalLink(String shortLink) {
-        ShortLink object = repository.findById(shortLink).orElseThrow(RuntimeException::new);
-        accountAccess(object);
-        repository.save(object);
-        return object.getOriginalLink();
+        var shortLinkEntity = repository.findById(shortLink).orElseThrow(RuntimeException::new);
+        accountAccess(shortLinkEntity);
+        repository.save(shortLinkEntity);
+        return shortLinkEntity.getOriginalLink();
+    }
+
+    public ResponseDTO info(String shortLink){
+        var shortLinkEntity = repository.findById(shortLink).orElseThrow(RuntimeException::new);
+        shortLinkEntity.setShortLink(getCompleteShortLink(shortLinkEntity.getShortLink()));
+        return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
 
     private void accountAccess(ShortLink shortLink){
