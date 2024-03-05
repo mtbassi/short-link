@@ -12,7 +12,7 @@ public class ResponseDTO {
 
     private String originalLink;
 
-    private BigDecimal access;
+    private Integer access;
 
     private LocalDate creationDate;
 

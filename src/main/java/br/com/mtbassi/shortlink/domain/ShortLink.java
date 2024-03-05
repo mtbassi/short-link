@@ -3,17 +3,18 @@ package br.com.mtbassi.shortlink.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "short_links")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShortLink {
 
     @Id
@@ -21,7 +22,7 @@ public class ShortLink {
 
     private String originalLink;
 
-    private BigDecimal access;
+    private Integer access;
 
     @CreationTimestamp
     private LocalDate creationDate;
