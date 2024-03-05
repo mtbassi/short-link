@@ -15,8 +15,6 @@ import java.util.Base64;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ShortLinkFactory {
 
-    private static String URL = "http://localhost:8080/shortlink/";
-
     public static ShortLink getInstance(RequestDTO data){
         var shortLink = generateShortLink(data.getOriginalLink());
         return ShortLink.builder()
@@ -31,7 +29,7 @@ public class ShortLinkFactory {
             var input = originalLink.concat(String.valueOf(LocalDateTime.now()));
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(input.getBytes());
-            return URL.concat(Base64.getUrlEncoder().encodeToString(hash).substring(0, 8));
+            return Base64.getUrlEncoder().encodeToString(hash).substring(0, 8);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
