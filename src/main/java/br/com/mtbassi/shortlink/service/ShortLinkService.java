@@ -14,8 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class ShortLinkService {
 
-    private static String BASE_URL = "http://localhost:8080/shortlink/";
-
     private final ShortLinkRepository repository;
 
     private final ModelMapper modelMapper;
