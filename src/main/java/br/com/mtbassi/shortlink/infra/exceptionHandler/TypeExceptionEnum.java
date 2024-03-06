@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum TypeExceptionEnum {
 
-    INVALID_URL_EXCEPTION(HttpStatus.BAD_REQUEST, "URL invalid.", "URL address must start with 'https://' or 'http://'");
+    INVALID_URL_EXCEPTION(HttpStatus.BAD_REQUEST, "URL invalid.", "URL address must start with 'https://' or 'http://'"),
+    ORIGINAL_LINK_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "Original link not found.", "Parameter not found, try again."),
+    GENERATE_SHORT_LINK_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating short link.", "Error generating short link, try again later.");
 
     private final HttpStatus status;
     private final String error;
