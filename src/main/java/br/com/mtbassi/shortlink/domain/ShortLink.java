@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "short_links")
@@ -25,5 +25,5 @@ public class ShortLink {
     private Integer access;
 
     @CreationTimestamp
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 }
