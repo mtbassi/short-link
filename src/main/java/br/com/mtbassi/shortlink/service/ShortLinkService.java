@@ -4,6 +4,8 @@ import br.com.mtbassi.shortlink.domain.ShortLink;
 import br.com.mtbassi.shortlink.dto.RequestDTO;
 import br.com.mtbassi.shortlink.dto.ResponseDTO;
 import br.com.mtbassi.shortlink.factory.ShortLinkFactory;
+import br.com.mtbassi.shortlink.infra.exceptionHandler.ErrorCustomException;
+import br.com.mtbassi.shortlink.infra.exceptionHandler.TypeExceptionEnum;
 import br.com.mtbassi.shortlink.repository.ShortLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,20 +20,21 @@ public class ShortLinkService {
 
     private final ModelMapper modelMapper;
     public ResponseDTO shortenLink(RequestDTO data){
+        validateUrl(data.getOriginalLink().toLowerCase());
         var shortLinkEntity = repository.save(ShortLinkFactory.getInstance(data));
         shortLinkEntity.setShortLink(getCompleteShortLink(shortLinkEntity.getShortLink()));
         return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
 
     public String retrieveOriginalLink(String shortLink) {
-        var shortLinkEntity = repository.findById(shortLink).orElseThrow(RuntimeException::new);
+        var shortLinkEntity = repository.findById(shortLink).orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
         accountAccess(shortLinkEntity);
         repository.save(shortLinkEntity);
         return shortLinkEntity.getOriginalLink();
     }
 
     public ResponseDTO info(String shortLink){
-        var shortLinkEntity = repository.findById(shortLink).orElseThrow(RuntimeException::new);
+        var shortLinkEntity = repository.findById(shortLink).orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
         shortLinkEntity.setShortLink(getCompleteShortLink(shortLinkEntity.getShortLink()));
         return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
@@ -46,5 +49,11 @@ public class ShortLinkService {
                 .path("/shortlink/{shortLink}")
                 .buildAndExpand(shortLink)
                 .toUriString();
+    }
+
+    private void validateUrl(String url){
+        if(!url.startsWith("https://") || !url.startsWith("http://")){
+            throw new ErrorCustomException(TypeExceptionEnum.INVALID_URL_EXCEPTION);
+        }
     }
 }

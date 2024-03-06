@@ -2,6 +2,8 @@ package br.com.mtbassi.shortlink.factory;
 
 import br.com.mtbassi.shortlink.domain.ShortLink;
 import br.com.mtbassi.shortlink.dto.RequestDTO;
+import br.com.mtbassi.shortlink.infra.exceptionHandler.ErrorCustomException;
+import br.com.mtbassi.shortlink.infra.exceptionHandler.TypeExceptionEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,7 +33,7 @@ public class ShortLinkFactory {
             byte[] hash = digest.digest(input.getBytes());
             return Base64.getUrlEncoder().encodeToString(hash).substring(0, 8);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new ErrorCustomException(TypeExceptionEnum.GENERATE_SHORT_LINK_EXCEPTION, e.getMessage());
         }
     }
 
