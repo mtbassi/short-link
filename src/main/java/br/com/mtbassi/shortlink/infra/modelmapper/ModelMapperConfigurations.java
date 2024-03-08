@@ -1,4 +1,4 @@
-package br.com.mtbassi.shortlink.infra.modelMapper;
+package br.com.mtbassi.shortlink.infra.modelmapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
