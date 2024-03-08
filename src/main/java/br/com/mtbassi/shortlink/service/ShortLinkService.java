@@ -20,21 +20,23 @@ public class ShortLinkService {
 
     private final ModelMapper modelMapper;
     public ResponseDTO shortenLink(RequestDTO data){
-        validateUrl(data.getOriginalLink().toLowerCase());
+        validateUrl(data.getOriginalLink().toLowerCase().trim());
         var shortLinkEntity = repository.save(ShortLinkFactory.getInstance(data));
         shortLinkEntity.setShortLink(getCompleteShortLink(shortLinkEntity.getShortLink()));
         return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
 
     public String retrieveOriginalLink(String shortLink) {
-        var shortLinkEntity = repository.findById(shortLink).orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
+        var shortLinkEntity = repository.findById(shortLink)
+                .orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
         accountAccess(shortLinkEntity);
         repository.save(shortLinkEntity);
         return shortLinkEntity.getOriginalLink();
     }
 
     public ResponseDTO info(String shortLink){
-        var shortLinkEntity = repository.findById(shortLink).orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
+        var shortLinkEntity = repository.findById(shortLink)
+                .orElseThrow(() -> new ErrorCustomException(TypeExceptionEnum.ORIGINAL_LINK_NOT_FOUND_EXCEPTION));
         shortLinkEntity.setShortLink(getCompleteShortLink(shortLinkEntity.getShortLink()));
         return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
@@ -52,7 +54,7 @@ public class ShortLinkService {
     }
 
     private void validateUrl(String url){
-        if(!url.startsWith("https://") || !url.startsWith("http://")){
+        if(!url.startsWith("http://") && !url.startsWith("https://")){
             throw new ErrorCustomException(TypeExceptionEnum.INVALID_URL_EXCEPTION);
         }
     }
