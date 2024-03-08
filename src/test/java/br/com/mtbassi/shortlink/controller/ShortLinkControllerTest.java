@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -23,27 +24,28 @@ import java.time.Month;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 public class ShortLinkControllerTest {
 
-    private static final String URL = "/shortlink";
+    private static final String BASE_URL = "/shortlink";
 
     @InjectMocks
-    private  ShortLinkController shortLinkController;
+    private ShortLinkController shortLinkController;
 
     @Mock
-    private  ShortLinkService shortLinkService;
+    private ShortLinkService shortLinkService;
 
-    private  RequestDTO requestDTO;
+    private RequestDTO requestDTO;
 
     private ResponseDTO responseDTO;
 
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(shortLinkController)
                 .alwaysDo(MockMvcResultHandlers.print())
                 .build();
@@ -61,17 +63,45 @@ public class ShortLinkControllerTest {
 
     @Test
     @SneakyThrows
-    void shouldReturnCreatedForValidCreation(){
+    void shouldReturnCreatedForValidCreation() {
         when(shortLinkService.shortenLink(any())).thenReturn(responseDTO);
-        mockMvc.perform(post(URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getRequest(requestDTO)))
+        mockMvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getRequest(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.short_link").value("/shortlink/yourshortlink"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.original_link").value("https://github.com/mtbassi"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.access").value(0))
                 .andReturn();
         verify(shortLinkService).shortenLink(any());
+        verifyNoMoreInteractions(shortLinkService);
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldRedirectWhenProvidingShortLink() {
+        when(shortLinkService.retrieveOriginalLink(anyString())).thenReturn("https://github.com/mtbassi");
+        mockMvc.perform(get(BASE_URL + "/{id}", "yourshortlink"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("https://github.com/mtbassi"))
+                .andExpect(MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, "https://github.com/mtbassi"));
+        verify(shortLinkService).retrieveOriginalLink(any());
+        verifyNoMoreInteractions(shortLinkService);
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldReturnGeneralInformationWhenPassingShortLinkId() {
+        when(shortLinkService.info(anyString())).thenReturn(responseDTO);
+        mockMvc.perform(get(BASE_URL + "/info/{id}", "yourid")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getRequest(requestDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.short_link").value("/shortlink/yourshortlink"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.original_link").value("https://github.com/mtbassi"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.access").value(0))
+                .andReturn();
+        verify(shortLinkService).info(any());
         verifyNoMoreInteractions(shortLinkService);
     }
 
