@@ -2,8 +2,8 @@ package br.com.mtbassi.shortlink.factory;
 
 import br.com.mtbassi.shortlink.domain.ShortLink;
 import br.com.mtbassi.shortlink.dto.RequestDTO;
-import br.com.mtbassi.shortlink.infra.exceptionHandler.ErrorCustomException;
-import br.com.mtbassi.shortlink.infra.exceptionHandler.TypeExceptionEnum;
+import br.com.mtbassi.shortlink.infra.exceptionhandler.ErrorCustomException;
+import br.com.mtbassi.shortlink.infra.exceptionhandler.TypeExceptionEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;

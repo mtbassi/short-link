@@ -1,4 +1,4 @@
-package br.com.mtbassi.shortlink.infra.exceptionHandler;
+package br.com.mtbassi.shortlink.infra.exceptionhandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

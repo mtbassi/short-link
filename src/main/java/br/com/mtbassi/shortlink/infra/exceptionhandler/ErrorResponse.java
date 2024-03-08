@@ -1,4 +1,4 @@
-package br.com.mtbassi.shortlink.infra.exceptionHandler;
+package br.com.mtbassi.shortlink.infra.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

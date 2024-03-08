@@ -1,4 +1,4 @@
-package br.com.mtbassi.shortlink.infra.exceptionHandler;
+package br.com.mtbassi.shortlink.infra.exceptionhandler;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
