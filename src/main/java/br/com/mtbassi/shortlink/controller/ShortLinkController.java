@@ -56,6 +56,14 @@ public class ShortLinkController {
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, originalLink).build();
     }
 
+    @Operation(summary = "Fetch short link information",
+            description = "Retrieves all short link information by short link id.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Information successfully recovered.",
+                            content = @Content(mediaType = "application/json", schema = @Schema())),
+                    @ApiResponse(responseCode = "409", description = "Original link not found.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            })
     @GetMapping("/info/{shortLink}")
     public ResponseEntity<ResponseDTO> info(@PathVariable String shortLink) {
         return ResponseEntity.ok(service.info(shortLink));
