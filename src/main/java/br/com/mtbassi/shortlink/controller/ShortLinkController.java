@@ -31,6 +31,8 @@ public class ShortLinkController {
                     @ApiResponse(responseCode = "201", description = "Resource created successfully.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid URL.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Error generating short link.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             })
     @PostMapping
@@ -40,6 +42,14 @@ public class ShortLinkController {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @Operation(summary = "Redirect to original link.",
+            description = "Redirects the user to the original link by the short link id.",
+            responses = {
+                    @ApiResponse(responseCode = "301", description = "Redirection carried out successfully.",
+                            content = @Content(mediaType = "application/json", schema = @Schema())),
+                    @ApiResponse(responseCode = "409", description = "Original link not found.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            })
     @GetMapping("/{shortLink}")
     public ResponseEntity<Void> redirect(@PathVariable String shortLink) {
         var originalLink = service.retrieveOriginalLink(shortLink);
