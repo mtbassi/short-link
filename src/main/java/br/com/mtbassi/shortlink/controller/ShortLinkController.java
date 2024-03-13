@@ -60,7 +60,7 @@ public class ShortLinkController {
             description = "Retrieves all short link information by short link id.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Information successfully recovered.",
-                            content = @Content(mediaType = "application/json", schema = @Schema())),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
                     @ApiResponse(responseCode = "409", description = "Original link not found.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             })
