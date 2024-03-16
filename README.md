@@ -60,6 +60,8 @@ The project utilizes [MySQL](https://www.mysql.com/) as the database.
 
 2. The API will be accessible at http://localhost:8080/shortlink
 
+3. The Swagger will be accessible at http://localhost:8080/swagger-ui/index.html#/
+
 ## API Endpoints
 The API provides the following endpoints:
 
