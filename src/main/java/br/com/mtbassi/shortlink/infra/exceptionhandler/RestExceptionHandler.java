@@ -2,6 +2,7 @@ package br.com.mtbassi.shortlink.infra.exceptionhandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,7 +18,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleErrorCustomException(ErrorCustomException e, HttpServletRequest request){
         var response = buildErrorResponse(e, request);
         log.error("Error handling request: {}", response.getError(), e);
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.status(response.getStatus())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 
     private ErrorResponse buildErrorResponse(ErrorCustomException e, HttpServletRequest request) {
