@@ -40,7 +40,9 @@ public class ShortLinkController {
     @PostMapping
     public ResponseEntity<ResponseDTO> shortenLink(@RequestBody @Valid RequestDTO data, UriComponentsBuilder uriBuilder) {
         var response = service.shortenLink(data);
-        var uri = uriBuilder.path("/shortlink/{id}").buildAndExpand(response.getShortLink()).toUri();
+        var uri = uriBuilder.path("/shortlink/{id}")
+                .buildAndExpand(response.getShortLink().substring(Math.max(0, response.getShortLink().length() - 8)))
+                .toUri();
         return ResponseEntity.created(uri).body(response);
     }
 
