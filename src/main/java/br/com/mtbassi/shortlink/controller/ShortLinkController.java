@@ -56,7 +56,7 @@ public class ShortLinkController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             })
     @GetMapping(value = "/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> shortenLinkQrCodes(@RequestParam @Valid String originalLink) {
+    public ResponseEntity<byte[]> shortenLinkQrCodes(@RequestParam(name = "original_link") @Valid String originalLink) {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .body(service.shortenLinkQrCode(originalLink));
