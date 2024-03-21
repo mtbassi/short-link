@@ -68,10 +68,10 @@ The API provides the following endpoints:
 **Short Link**
 ```markdown
 # 1. Shorten link
-curl -X POST -H "Content-Type: application/json" -d '{"originalLink": "https://example.com"}' http://localhost:8080/shortlink
+curl -X POST -H "Content-Type: application/json" -d '{"original_link": "https://example.com"}' http://localhost:8080/shortlink
 
 # 2. Short link and generate QR code.
-curl 'http://localhost:8080/shortlink/qr-code?originalLink=https://example.com' --output qr_code.png
+curl 'http://localhost:8080/shortlink/qr-code?original_link=https://example.com' --output qr_code.png
 
 # 3. Redirect to original link
 curl -L http://localhost:8080/shortlink/yourShortenedLink
