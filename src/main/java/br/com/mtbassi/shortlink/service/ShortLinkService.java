@@ -21,6 +21,7 @@ public class ShortLinkService {
     private final QrCodeService qrCodeService;
 
     private final ModelMapper modelMapper;
+
     public ResponseDTO shortenLink(RequestDTO data){
         validateUrl(data.getOriginalLink().toLowerCase().trim());
         var shortLinkEntity = repository.save(ShortLinkFactory.getInstance(data));
@@ -28,9 +29,9 @@ public class ShortLinkService {
         return modelMapper.map(shortLinkEntity, ResponseDTO.class);
     }
 
-    public byte[] shortenLinkQrCode(RequestDTO data){
-        validateUrl(data.getOriginalLink().toLowerCase().trim());
-        return qrCodeService.generateQrCode(data.getOriginalLink());
+    public byte[] shortenLinkQrCode(String originalLink){
+        validateUrl(originalLink.toLowerCase().trim());
+        return qrCodeService.generateQrCode(originalLink);
     }
 
     public String retrieveOriginalLink(String shortLink) {

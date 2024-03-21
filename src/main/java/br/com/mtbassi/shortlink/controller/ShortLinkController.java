@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,22 +45,21 @@ public class ShortLinkController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @Operation(summary = "Short link qr code.",
-            description = "Feature creates a new short link qr code.",
+    @Operation(summary = "Short link and generate QR code.",
+            description = "Generates a QR code for a given URL and returns it as a byte array.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Resource generate successfully.",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
+                    @ApiResponse(responseCode = "200", description = "QR code generated successfully.",
+                            content = @Content(mediaType = MediaType.IMAGE_PNG_VALUE)),
                     @ApiResponse(responseCode = "400", description = "Invalid URL.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-                    @ApiResponse(responseCode = "500", description = "Error generating qr code.",
+                    @ApiResponse(responseCode = "500", description = "Error generating QR code.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             })
-    @GetMapping("/qr-code")
-    @SneakyThrows
-    public ResponseEntity<byte[]> shortenLinkQrCodes(@RequestBody @Valid RequestDTO data) {
+    @GetMapping(value = "/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> shortenLinkQrCodes(@RequestParam @Valid String originalLink) {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
-                .body(service.shortenLinkQrCode(data));
+                .body(service.shortenLinkQrCode(originalLink));
     }
 
     @Operation(summary = "Redirect to original link.",
