@@ -70,10 +70,13 @@ The API provides the following endpoints:
 # 1. Shorten link
 curl -X POST -H "Content-Type: application/json" -d '{"originalLink": "https://example.com"}' http://localhost:8080/shortlink
 
-# 2. Redirect to original link
+# 2. Short link and generate QR code.
+curl 'http://localhost:8080/shortlink/qr-code?originalLink=https://example.com' --output qr_code.png
+
+# 3. Redirect to original link
 curl -L http://localhost:8080/shortlink/yourShortenedLink
 
-# 3. Get information about a shortened link
+# 4. Get information about a shortened link
 curl http://localhost:8080/shortlink/info/yourShortenedLink
 ```
 
