@@ -11,8 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,6 +42,24 @@ public class ShortLinkController {
         var response = service.shortenLink(data);
         var uri = uriBuilder.path("/shortlink/{id}").buildAndExpand(response.getShortLink()).toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @Operation(summary = "Short link qr code.",
+            description = "Feature creates a new short link qr code.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource generate successfully.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid URL.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Error generating qr code.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            })
+    @GetMapping("/qr-code")
+    @SneakyThrows
+    public ResponseEntity<byte[]> shortenLinkQrCodes(@RequestBody @Valid RequestDTO data) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(service.shortenLinkQrCode(data));
     }
 
     @Operation(summary = "Redirect to original link.",
