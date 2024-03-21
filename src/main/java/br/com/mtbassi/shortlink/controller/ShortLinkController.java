@@ -81,7 +81,7 @@ public class ShortLinkController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Information successfully recovered.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
-                    @ApiResponse(responseCode = "409", description = "Original link not found.",
+                    @ApiResponse(responseCode = "404", description = "Original link not found.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
             })
     @GetMapping("/info/{shortLink}")
