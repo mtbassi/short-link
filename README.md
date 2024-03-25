@@ -4,7 +4,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-%23ED8B00.svg?style=for-the-badge&logo=mysql&logoColor=white&color=%233d6ab2)
 [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
-Link shortener that allows you to generate a shortened link for quick sharing and use it for 24 hours. After this period, the link is automatically deleted.
+This link shortening service allows you to generate a shortened link for quick sharing and also offers the functionality to generate a QR code containing the original link. So, in addition to sharing the link directly, you can also provide the QR code for scanning. It's important to note that the QR code does not expire, while the shortened link is valid for 24 hours. After this period, the link is automatically removed to ensure the security and privacy of users.
 
 ## Table of Contents
 
